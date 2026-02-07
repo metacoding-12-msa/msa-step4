@@ -1,4 +1,6 @@
 package com.metacoding.order.orders;
 
-public class OrderItemRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
 }

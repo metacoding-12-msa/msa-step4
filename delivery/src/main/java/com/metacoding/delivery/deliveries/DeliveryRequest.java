@@ -1,4 +1,7 @@
 package com.metacoding.delivery.deliveries;
 
-public class DeliveryRequest {
+public record DeliveryRequest(
+    int orderId,
+    String address
+) {
 }

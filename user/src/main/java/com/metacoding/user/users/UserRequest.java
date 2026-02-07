@@ -1,4 +1,7 @@
 package com.metacoding.user.users;
 
-public class UserRequest {
+public record UserRequest(
+    String username,
+    String password
+    ) {
 }
