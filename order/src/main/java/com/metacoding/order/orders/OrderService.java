@@ -16,22 +16,25 @@ public class OrderService {
     public OrderResponse createOrder(int userId, List<OrderRequest.OrderItemDTO> orderItems, String address) {
         // 1. 주문 생성 및 저장
         Order createdOrder = orderRepository.save(Order.create(userId));
+        final int orderId = createdOrder.getId();
         
         // 2. 주문 아이템 생성 및 저장 
-        orderItemRepository.saveAll(
-            orderItems.stream()
-                .map(item -> OrderItem.create(createdOrder.getId(), item.productId(), item.quantity(), item.price()))
-                .toList()
-        );
+        List<OrderItem> createdOrderItems = orderItems.stream()
+            .map(item -> OrderItem.create(orderId, item.productId(), item.quantity(), item.price()))
+            .toList();
+        orderItemRepository.saveAll(createdOrderItems);
+        
         // 3. 주문 완료 처리
         createdOrder.complete();
-        return OrderResponse.from(createdOrder);
+        return OrderResponse.from(createdOrder, createdOrderItems);
     }
 
     public OrderResponse findById(int orderId) {
         Order findOrder = orderRepository.findById(orderId)
                 .orElseThrow(() -> new Exception404("주문을 찾을 수 없습니다."));
-        return OrderResponse.from(findOrder);
+        List<OrderItem> findOrderItems = orderItemRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new Exception404("주문 아이템을 찾을 수 없습니다."));
+        return OrderResponse.from(findOrder, findOrderItems);
     }
 
     @Transactional
