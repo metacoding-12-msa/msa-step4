@@ -27,8 +27,8 @@ public class DeliveryService {
 
     @Transactional
     public void cancelDelivery(int orderId) {
-        Delivery cancelledDelivery = deliveryRepository.findByOrderId(orderId)
+        Delivery findDelivery = deliveryRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new Exception404("배달 정보를 조회할 수 없습니다."));
-        cancelledDelivery.cancel();
+        findDelivery.cancel();
     }
 }
