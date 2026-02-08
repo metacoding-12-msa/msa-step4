@@ -7,11 +7,10 @@ import com.metacoding.user.core.util.Resp;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/login")
+    @GetMapping("/api/users/{userId}")
     public ResponseEntity<?> login(@RequestBody UserRequest requestDTO) {
         return Resp.ok(userService.login(requestDTO.username(), requestDTO.password()));
     }
